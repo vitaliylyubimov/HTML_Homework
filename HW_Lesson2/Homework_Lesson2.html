@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" href="style.css"/>
+    <title>Homework Lesson2</title>
+  </head>
+  <body style="background-image: url(c_plusplus)">
+        <pre><code style="color:red">
+ <span>#include</span> &lt;Windows.h&gt;
+ <span>#include</span> &lt;windowsx.h&gt;
+ <span>#include</span> &lt;iostream&gt;
+ <span>#include</span> &lt;string&gt;
+ <span>#include</span> &lt;sstream&gt;
+ <span>#include</span> &lt;memory&gt;
+ <span>#include</span> "resource.h"
+ <span>#include</span> &lt;ctime&gt;
+ <span>#include</span> &lt;vector&gt;
+ <span>using namespace std</span><span style="color:black">;</span>
+       </code></pre>
+ <pre><code><var> INT_PTR</var> <span style="color:darkmagenta">CALLBACK</span> DlgProc(<var>HWND</var>, <var>UINT</var>, <var>WPARAM</var>, <var>LPARAM</var>);
+
+ <var style="color:blue">int</var> <span style="color:darkmagenta">APIENTRY</span> WinMain(<var>HINSTANCE</var> <var style="color:gray">hInst</var>, <var>HINSTANCE</var> <var style="color:gray">hPrev</var>, <var>LPSTR</var> <var style="color:gray">lpszCmdOpt</var>, <var style="color:blue">int</var> <var style="color:gray">nShowOpt</var>)
+ {
+     <span>return</span><span style="color:darkmagenta"> DialogBox</span>(<var style="color:gray">hInst</var>, <span style="color:darkmagenta">MAKEINTRESOURCE </span>(<var style="color:darkmagenta">IDD_DIALOG1</var>), <samp>NULL</samp>, DlgProc);
+ } 
+ <var>HWND</var> hList, hStatic;
+ <var>wstring</var> str;
+ <var>wstringstream</var> sstr;
+ <var>INT_PTR</var> <span style="color:darkmagenta">CALLBACK</span> DlgProc(<var>HWND</var> <var style="color:gray">hDlg</var>, <var>UINT</var> <var style="color:gray">msg</var>, <var>WPARAM</var> <var style="color:gray">wParam</var>, <var>LPARAM</var> <var style="color:gray">lParam</var>)
+ {
+     <span>switch</span> (<var style="color:gray">msg</var>)
+     {
+         <span>case</span> <var style="color:darkmagenta">WM_INITDIALOG</var>:
+         {
+              hList = <span style="color:darkmagenta">GetDlgItem</span>(<var style="color:gray">hDlg</var>, <var style="color:darkmagenta">IDC_LIST</var>);
+              hStatic = <span style="color:darkmagenta">GetDlgItem</span>(<var style="color:gray">hDlg</var>, <var style="color:darkmagenta">IDC_RESULT</var>);
+         }
+          <span>return</span> <var style="color:darkmagenta">TRUE</var>;
+	 <span>case</span> <var style="color:darkmagenta">WM_COMMAND</var>:
+		<span>switch</span> (<span style="color:darkmagenta">LOWORD</span>(<var style="color:gray">wParam</var>))
+		{
+		<span>case</span> <var style="color:darkmagenta">IDC_BTNSTART</var>:
+		{
+			<span style="color:darkmagenta">SendDlgItemMessage</span>(<var style="color:gray">hDlg</var>, <var style="color:darkmagenta">IDC_LIST</var>, <var style="color:darkmagenta">LB_RESETCONTENT</var>, <var style="color:darkmagenta">NULL</var>, <var style="color:darkmagenta">NULL</var>);
+			<var>INT</var> count = rand() % 10 + 20;
+			<span>for</span> (<var style="color:blue">int</var> i = 0; i &lt; count; i++)
+                        {
+                                <var>INT</var> idx = rand() % 21 - 10;
+                                <span>if</span> (idx == 0)
+                                {
+                                    idx += rand() % 1 + 9;
+                                }
+                                sstr.str(<span style="color:darkmagenta">TEXT</span>(<span style="color:red">""</span>));
+                                sstr <span style="color:darkturquoise">&lt;&lt;</span> idx;
+                                <span style="color:darkmagenta">ListBox_AddString</span>(hList, sstr.str().c_str());
+                                sstr.clear();
+                        } 
+                }
+                <span>break</span>;
+                <span>case</span> <var style="color:darkmagenta">IDC_SUM</var>:
+                {
+                  <var>INT</var> num = 0;
+                  <var>INT</var> res = 0;
+                  <var>TCHAR</var> str[256];
+                  <var style="color:blue">int</var> count = <span style="color:darkmagenta">SendDlgItemMessage</span>(<var style="color:gray">hDlg</var>, <var style="color:darkmagenta">IDC_LIST</var>, <var style="color:darkmagenta">LB_GETSELCOUNT</var>, <var style="color:darkmagenta">NULL</var>, <var style="color:darkmagenta">NULL</var>);
+                  <span>if</span> (count != <var style="color:darkmagenta">LB_ERR</var>)
+                  {
+                      std::<var>unique_ptr</var>&lt;<var style="color:blue">int</var>&gt; indexes(<var style="color:blue">new int</var>[count]);
+                      <span style="color:darkmagenta">SendDlgItemMessage</span>(<var style="color:gray">hDlg</var>, <var style="color:darkmagenta">IDC_LIST</var>, <var style="color:darkmagenta">LB_GETSELITEMS</var>, count, <var>LPARAM</var>(indexes.get()));
+                      <span>for</span> (<var style="color:blue">int</var> i = 0; i &lt; count; i++)
+                      {
+                             <var>TCHAR</var> buff[10];
+                             <span style="color:darkmagenta">SendDlgItemMessage</span>(<var style="color:gray">hDlg</var>, <var style="color:darkmagenta">IDC_LIST</var>, <var style="color:darkmagenta">LB_GETTEXT</var>, indexes.get()[i], <var>LPARAM</var>(buff));
+                             num = <span style="color:darkmagenta">_wtoi</span>(buff);
+                             res = res + num;
+                      }
+
+                  }
+                  sstr.str(<span style="color:darkmagenta">TEXT</span>(<span style="color:red">""</span>));
+                  sstr <span style="color:darkturquoise">&lt;&lt;</span> res;
+                  <span style="color:darkmagenta">SetWindowText</span>(hStatic, sstr.str().c_str());
+                  sstr.clear();
+                }
+                <span>break</span>;
+                <span>case</span> <var style="color:darkmagenta">IDC_PROIZVOD</var>:
+                {
+                  <var>INT</var> num = 0;
+                  <var>INT</var> res = 1;
+                  <var>TCHAR</var> str[256];
+                  <var style="color:blue">int</var> count = <span style="color:darkmagenta">SendDlgItemMessage</span>(<var style="color:gray">hDlg</var>, <var style="color:darkmagenta">IDC_LIST</var>, <var style="color:darkmagenta">LB_GETSELCOUNT</var>, <var style="color:darkmagenta">NULL</var>, <var style="color:darkmagenta">NULL</var>);
+                  <span>if</span> (count != <var style="color:darkmagenta">LB_ERR</var>)
+                  {
+                      std::<var>unique_ptr</var>&lt;<var style="color:blue">int</var>&gt; indexes(<var style="color:blue">new int</var>[count]);
+                      <span style="color:darkmagenta">SendDlgItemMessage</span>(<var style="color:gray">hDlg</var>, <var style="color:darkmagenta">IDC_LIST</var>, <var style="color:darkmagenta">LB_GETSELITEMS</var>, count, <var>LPARAM</var>(indexes.get()));
+                      <span>for</span> (<var style="color:blue">int</var> i = 0; i &lt; count; i++)
+                      {
+                          <var>TCHAR</var> buff[10];
+                          <span style="color:darkmagenta">SendDlgItemMessage</span>(<var style="color:gray">hDlg</var>, <var style="color:darkmagenta">IDC_LIST</var>, <var style="color:darkmagenta">LB_GETTEXT</var>, indexes.get()[i], <var>LPARAM</var>(buff));
+                          num = <span style="color:darkmagenta">_wtoi</span>(buff);
+                          res = res * num;
+                      }
+                  }
+                  sstr.str(<span style="color:darkmagenta">TEXT</span>(<span style="color:red">""</span>));
+                  sstr <span style="color:darkturquoise">&lt;&lt;</span> res;
+                  <span style="color:darkmagenta">SetWindowText</span>(hStatic, sstr.str().c_str());
+                  sstr.clear();
+               }
+               <span>break</span>;
+               <span>case</span> <var style="color:darkmagenta">IDC_SARIFM</var>:
+               {
+                 <var>FLOAT</var> num = 0;
+                 <var>FLOAT</var> res = 0;
+                 <var>TCHAR</var> buff[10];
+                 <var>TCHAR</var> str[256];
+                 <var style="color:blue">int</var> count = <span style="color:darkmagenta">SendDlgItemMessage</span>(<var style="color:gray">hDlg</var>, <var style="color:darkmagenta">IDC_LIST</var>, <var style="color:darkmagenta">LB_GETSELCOUNT</var>, <var style="color:darkmagenta">NULL</var>, <var style="color:darkmagenta">NULL</var>);
+                 <span>if</span> (count != <var style="color:darkmagenta">LB_ERR</var>)
+                 {
+                   std::<var>unique_ptr</var>&lt;<var style="color:blue">int</var>&gt; indexes(<var style="color:blue">new int</var>[count]);
+                   <span style="color:darkmagenta">SendDlgItemMessage</span>(<var style="color:gray">hDlg</var>, <var style="color:darkmagenta">IDC_LIST</var>, <var style="color:darkmagenta">LB_GETSELITEMS</var>, count, <var>LPARAM</var>(indexes.get()));
+                   <span>for</span> (<var style="color:blue">int</var> i = 0; i &lt; count; i++)
+                   {
+                     <var>TCHAR</var> buff[10];
+                     <span style="color:darkmagenta">SendDlgItemMessage</span>(<var style="color:gray">hDlg</var>, <var style="color:darkmagenta">IDC_LIST</var>, <var style="color:darkmagenta">LB_GETTEXT</var>, indexes.get()[i], <var>LPARAM</var>(buff));
+                     num = <span style="color:darkmagenta">_wtof</span>(buff);
+                     res = res + num;
+                   }
+                     res = res / count;
+                 }
+                     sstr.str(<span style="color:darkmagenta">TEXT</span>(<span style="color:red">""</span>));
+                     sstr <span style="color:darkturquoise">&lt;&lt;</span> res;
+                     <span style="color:darkmagenta">SetWindowText</span>(hStatic, sstr.str().c_str());
+                     sstr.clear();
+               }
+              <span>break</span>;
+           }
+           <span>return</span> <var style="color:darkgray">TRUE</var>;
+           <span>case</span> <var style="color:darkmagenta">WM_CLOSE</var>:
+               <span style="color:darkmagenta">EndDialog</span>(<var style="color:gray">hDlg</var>, 0);
+               <span>return</span> <var style="color:darkmagenta">TRUE</var>;
+            }
+	<span>return</span> <span style="color:darkmagenta">FALSE</span>;
+ }
+    </code></pre>
+  </body>
+</html>

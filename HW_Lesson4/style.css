@@ -1,0 +1,36 @@
+﻿body{
+	counter-reset: count_h1;
+	color: darkmagenta;
+	background-image: url(http://getbg.net/upload/full/www.GetBg.net_Backgrounds_Black_cubic_background_094966_.jpg);
+}
+h1{
+	counter-reset: count_h2;
+	text-shadow: 2px 2px 3px white;
+}
+h2{
+	counter-reset: count_h3;
+	text-shadow: 1px 1px 5px red;"
+}
+h3{
+	counter-reset: count_h4;
+	text-shadow: 1px 1px 5px yellow;"
+}
+h4{
+	text-shadow: 1px 1px 5px blue;"
+}
+h1:before{
+	content: counter(count_h1, upper-roman) ". ";
+	counter-increment: count_h1;
+}
+h2:before{
+    content: counter(count_h2, decimal) ". ";
+	counter-increment: count_h2; 
+}
+h3:before{
+    content: counter(count_h2, decimal) "." counter(count_h3, decimal) ". ";
+	counter-increment: count_h3; 
+}
+h4:before{
+    content: counter(count_h4, upper-latin) ". ";
+	counter-increment: count_h4; 
+}

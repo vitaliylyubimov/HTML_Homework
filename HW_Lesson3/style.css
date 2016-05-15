@@ -1,0 +1,21 @@
+﻿h1{
+	text-align: center;
+}
+*{
+	font-family: Libertine, Palatino, 'Palatino Linotype', 
+	'Book Antiqua', Georgia, 'Times New Roman', serif;
+}
+a{	
+	color: FireBrick;
+}
+p{
+	padding-top: 18px;
+	padding-bottom: 18px;
+	text-indent: 25px;
+}
+pre{
+	text-indent: 25px;
+}
+body{
+	background: url(g.jpg);
+}
